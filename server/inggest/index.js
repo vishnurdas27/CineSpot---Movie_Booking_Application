@@ -1,16 +1,18 @@
 import { Inngest } from "inngest";
 import User from "../models/User.js";
 
+// Initialize the client
 export const inngest = new Inngest({ id: "cinespot" });
 
 // Function to save user data to database
-const syncUserCreation = Inggest.createFunction(
-    {id: 'sync-user-from-clerk'},
-    {event: 'clerk/user.created'},
-    async ({event})=>{
-        const {id, first_name, last_name, email_addresses, image_url} = event.data
+// FIX: Use 'inngest.createFunction' (lowercase 'i', instance variable)
+const syncUserCreation = inngest.createFunction(
+    { id: 'sync-user-from-clerk' },
+    { event: 'clerk/user.created' },
+    async ({ event }) => {
+        const { id, first_name, last_name, email_addresses, image_url } = event.data
         const userData = {
-            _id :id,
+            _id: id,
             email: email_addresses[0].email_address,
             name: first_name + ' ' + last_name,
             image: image_url
@@ -20,23 +22,23 @@ const syncUserCreation = Inggest.createFunction(
 )
 
 //Function to delete user from database
-const syncUserDeletion = Inggest.createFunction(
-    {id: 'delete-user-from-clerk'},
-    {event: 'clerk/user.deleted'},
-    async ({event})=>{
-        const {id} = event.data 
+const syncUserDeletion = inngest.createFunction(
+    { id: 'delete-user-from-clerk' },
+    { event: 'clerk/user.deleted' },
+    async ({ event }) => {
+        const { id } = event.data
         await User.findByIdAndDelete(id)
     }
 )
 
 //Function to update user from database
-const syncUserUpdation = Inggest.createFunction(
-    {id: 'update-user-from-clerk'},
-    {event: 'clerk/user.updated'},
-    async ({event})=>{
-        const {id, first_name, last_name, email_addresses, image_url} = event.data
+const syncUserUpdation = inngest.createFunction(
+    { id: 'update-user-from-clerk' },
+    { event: 'clerk/user.updated' },
+    async ({ event }) => {
+        const { id, first_name, last_name, email_addresses, image_url } = event.data
         const userData = {
-            _id :id,
+            _id: id,
             email: email_addresses[0].email_address,
             name: first_name + ' ' + last_name,
             image: image_url
@@ -45,6 +47,8 @@ const syncUserUpdation = Inggest.createFunction(
     }
 )
 
-export const functions = [syncUserCreation,
+export const functions = [
+    syncUserCreation,
     syncUserDeletion,
-    syncUserUpdation];
+    syncUserUpdation
+];

@@ -6,7 +6,7 @@ export const inngest = new Inngest({ id: "cinespot" });
 
 // Function to save user data to database
 // FIX: Use 'inngest.createFunction' (lowercase 'i', instance variable)
-const syncUserCreation = Inngest.createFunction(
+const syncUserCreation = inngest.createFunction(
     { id: 'sync-user-from-clerk' },
     { event: 'clerk/user.created' },
     async ({ event }) => {
@@ -22,7 +22,7 @@ const syncUserCreation = Inngest.createFunction(
 )
 
 //Function to delete user from database
-const syncUserDeletion = Inngest.createFunction(
+const syncUserDeletion = inngest.createFunction(
     { id: 'delete-user-from-clerk' },
     { event: 'clerk/user.deleted' },
     async ({ event }) => {
@@ -32,7 +32,7 @@ const syncUserDeletion = Inngest.createFunction(
 )
 
 //Function to update user from database
-const syncUserUpdation = Inngest.createFunction(
+const syncUserUpdation = inngest.createFunction(
     { id: 'update-user-from-clerk' },
     { event: 'clerk/user.updated' },
     async ({ event }) => {
